@@ -1,0 +1,25 @@
+/* Empty. Add your own CSS if you like */
+
+
+.center-middle {
+  -webkit-background-size: cover;
+  -moz-background-size: cover;
+  -o-background-size: cover;
+  background-size: cover;
+  position: fixed;
+    top: 35%;
+}
+.centered {
+  text-align: center;
+}
+.muted {
+  opacity: 0.6;
+}
+.balancetxt {
+  font-size: 30px;
+  font-weight: bold;
+  line-height: 35px;
+}
+.red {
+  color: red;
+}

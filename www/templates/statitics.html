@@ -1,0 +1,13 @@
+<ion-view view-title="Block Statitics">
+  <ion-content>
+    <ion-list>
+      <!-- <ion-item ng-repeat="playlist in playlists" href="#/app/block/{{playlist.number}}"> -->
+      <ion-item ng-repeat="playlist in playlists">
+        <h2>Block #{{playlist.number}}</h2>
+        <p>
+          name: {{playlist.name || 'noname' }}, gasUsed: {{playlist.gasUsed}}
+        </p>
+      </ion-item>
+    </ion-list>
+  </ion-content>
+</ion-view>
