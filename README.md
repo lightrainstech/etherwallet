@@ -1,0 +1,2 @@
+# etherwallet
+An Ethereum Wallet
