@@ -64,7 +64,10 @@ angular.module('starter.controllers', [])
     var lastThirty = resp.data.data.reverse().slice(0, 50);
 
     $scope.items = lastThirty;
-
+    // $scope.lastusd = lastThirty[0].usd;
+    // $scope.seclastusd = lastThirty[1].usd;
+    var change = lastThirty[0].usd - lastThirty[1].usd, dd;
+    $scope.lastusd = (change >= 0) ? lastThirty[0].usd+ ' <span class="ion-android-arrow-dropup up"></span>' : lastThirty[0].usd + ' <span class="ion-android-arrow-dropdown down"></span>';
     // For JSON responses, resp.data contains the result
   }, function(err) {
     console.error('ERR', err);

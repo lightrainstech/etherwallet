@@ -41,6 +41,9 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   font-weight: bold;
   line-height: 35px;
 }
-.red {
+.red, .down {
   color: red;
+}
+.green, .up {
+  color: green;
 }

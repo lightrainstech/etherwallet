@@ -1,5 +1,9 @@
 <ion-view view-title="Price">
   <ion-content>
+    <div class="row padding">
+      <div class="col centered balancetxt" ng-bind-html="lastusd">
+      </div>
+    </div>
     <ion-list>
       <ion-item ng-repeat="item in items">
         <h2>USD {{ item.usd }}</h2>
