@@ -1,4 +1,4 @@
-angular.module('starter.controllers', [])
+angular.module('starter.controllers', ['chart.js'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
@@ -29,14 +29,19 @@ angular.module('starter.controllers', [])
 })
 
 
-.controller('ChkBalanceCtrl', function($scope, $stateParams, $http, $rootScope, $q, $ionicLoading) {
+.controller('ChkBalanceCtrl', function($scope, $stateParams, $http, $rootScope, $q, $ionicLoading, $localStorage) {
+
+  $scope.data = {ethaddr : $localStorage.addSave,ifSave : ($localStorage.addSave) ? true : false};
 
   $scope.checkBalance = function(data){
     $rootScope.show($ionicLoading);
 
-    // if ( typeof(data.ifSave) !== 'undefined') {
-    //   window.localStorage['ethaddr'] = data.ethaddr;
-    // }
+    if(data.ifSave == true){
+        $localStorage.addSave = data.ethaddr;
+     } else {
+       $localStorage.addSave = "";
+       data.ethaddr = "";
+    }
 
     $http.get($rootScope.apiBase + '/account/' + data.ethaddr).then(function(resp) {
       $rootScope.hide($ionicLoading);
@@ -55,20 +60,43 @@ angular.module('starter.controllers', [])
   }
 })
 
-.controller('PriceCtrl', function($scope, $http, $rootScope, $ionicLoading) {
+.controller('PriceCtrl', function($scope, $http,$filter, $rootScope, $ionicLoading) {
 
   $rootScope.show($ionicLoading);
 
+
   $http.get($rootScope.apiBase + '/statistics/price').then(function(resp) {
     $rootScope.hide($ionicLoading);
+
     var lastThirty = resp.data.data.reverse().slice(0, 50);
+    var lastTen = lastThirty.slice(0, 8);
+    lastTen = lastTen.reverse();
+    var labels = [], usds = [];
+
+    angular.forEach(lastTen, function(num) {
+      console.dir(num.time);
+      labels.push($filter('date')(num.time, "HH:mm"));
+      usds.push(num.usd.toString());
+    });
+
+    $scope.labels = labels;
+    $scope.data = [usds];
+
+    // $scope.onClick = function (points, evt) {
+    //   var clicked = points[0].value;
+    //   var change = lastThirty[0].usd - clicked;
+    //   $scope.lastusd = (change >= 0) ? '$ ' + clicked + ' <span class="ion-android-arrow-dropup up"></span>' : '$ ' + clicked + ' <span class="ion-android-arrow-dropdown down"></span>';
+    //   setTimeout(function(){
+    //     var nchange = lastThirty[0].usd - lastThirty[1].usd;
+    //     console.log(nchange);
+    //     $scope.lastusd = (nchange >= 0) ? '$ ' + lastThirty[0].usd+ ' <span class="ion-android-arrow-dropup up"></span>' : '$ ' + lastThirty[0].usd + ' <span class="ion-android-arrow-dropdown down"></span>';
+    //   },2000);
+    // };
+
 
     $scope.items = lastThirty;
-    // $scope.lastusd = lastThirty[0].usd;
-    // $scope.seclastusd = lastThirty[1].usd;
-    var change = lastThirty[0].usd - lastThirty[1].usd, dd;
-    $scope.lastusd = (change >= 0) ? lastThirty[0].usd+ ' <span class="ion-android-arrow-dropup up"></span>' : lastThirty[0].usd + ' <span class="ion-android-arrow-dropdown down"></span>';
-    // For JSON responses, resp.data contains the result
+    var change = lastThirty[0].usd - lastThirty[1].usd;
+    $scope.lastusd = (change >= 0) ? '$ ' + lastThirty[0].usd+ ' <span class="ion-android-arrow-dropup up"></span>' : '$ ' + lastThirty[0].usd + ' <span class="ion-android-arrow-dropdown down"></span>';
   }, function(err) {
     console.error('ERR', err);
     // err.status will contain the status code

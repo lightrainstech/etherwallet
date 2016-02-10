@@ -8,15 +8,16 @@
           <input type="text" ng-model="data.ethaddr" placeholder="0x2a...">
         </label>
       </div>
-      <!-- <div class="item item-toggle">
+      <div class="item item-toggle">
         Save Address
         <label class="toggle toggle-assertive">
-          <input type="checkbox" ng-model="data.ifSave">
+          <!-- <input type="checkbox" ng-model="data.ifSave" checked="checked"> -->
+          <input type='checkbox' ng-model='data.ifSave'>
           <div class="track">
             <div class="handle"></div>
           </div>
         </label>
-      </div> -->
+      </div>
 
       <div class="padding">
         <button class="button button-block button-positive" ng-click="checkBalance(data)">Check Balance</button>

@@ -47,3 +47,8 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 .green, .up {
   color: green;
 }
+canvas#line.chart.chart-line {
+  width: 100% !important;
+  max-width: 100%;
+
+}
