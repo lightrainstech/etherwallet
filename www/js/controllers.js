@@ -13,13 +13,21 @@ angular.module('starter.controllers', [])
   $http.get($rootScope.apiBase + '/basic_stats').then(function(resp) {
     $rootScope.hide($ionicLoading);
     $scope.playlists = resp.data.data.blocks;
-    // For JSON responses, resp.data contains the result
-  }, function(err) {
-    console.error('ERR', err);
-    // err.status will contain the status code
-  })
+  });
+
+  $scope.doRefresh = function() {
+    $http.get($rootScope.apiBase + '/basic_stats').then(function(resp) {
+      items = resp.data.data.blocks;
+      $scope.playlists = items.concat($scope.playlists);
+      $scope.$broadcast('scroll.refreshComplete');
+    });
+  };
+})
+
+.controller('SingleBlockCtrl', function($scope, $http, $rootScope, $ionicLoading) {
 
 })
+
 
 .controller('ChkBalanceCtrl', function($scope, $stateParams, $http, $rootScope, $q, $ionicLoading) {
 
