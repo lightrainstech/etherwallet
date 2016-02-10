@@ -61,7 +61,7 @@ angular.module('starter.controllers', [])
 
   $http.get($rootScope.apiBase + '/statistics/price').then(function(resp) {
     $rootScope.hide($ionicLoading);
-    var lastThirty = resp.data.data.slice(0, 30);
+    var lastThirty = resp.data.data.reverse().slice(0, 50);
 
     $scope.items = lastThirty;
 
