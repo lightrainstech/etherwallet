@@ -42,7 +42,7 @@ angular.module('starter.controllers', [])
       $rootScope.hide($ionicLoading);
       data.ethaddr = '';
       if ( typeof(resp.data.data[0]) !== 'undefined') {
-        $scope.response = resp.data.data[0].balance + ' ETH';
+        $scope.response = (resp.data.data[0].balance * 0.000000000000000001) + ' ETH';
         $scope.error = '';
       } else {
         $scope.error = "Sorry, Not a valid Ether Account";
