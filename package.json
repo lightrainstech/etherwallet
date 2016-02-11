@@ -24,6 +24,7 @@
     "com.verso.cordova.clipboard"
   ],
   "cordovaPlatforms": [
-    "ios"
+    "ios",
+    "android"
   ]
 }
