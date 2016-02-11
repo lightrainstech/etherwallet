@@ -117,6 +117,10 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
   }
 })
 
+.controller('sendCtrl', function($scope, $http) {
+
+})
+
 .controller('MarketCtrl', function($scope, $http, $localStorage, $rootScope, $ionicLoading) {
   var socket = io.connect('http://socket.coincap.io');
   $scope.values = [];

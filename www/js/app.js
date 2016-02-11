@@ -99,6 +99,7 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js','ngStorage
       views: {
         'menuContent': {
           templateUrl: 'templates/send.html',
+          controller: 'sendCtrl'
         }
       }
     })
