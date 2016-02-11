@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<widget id="com.ionicframework.starter" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
+<widget id="com.lightrains.etherwallet" version="0.0.1" xmlns="http://www.w3.org/ns/widgets" xmlns:cdv="http://cordova.apache.org/ns/1.0">
   <name>EtherWallet</name>
   <description>
         A Wallet for Ethereum (ETH)
     </description>
-  <author email="you@example.com" href="http://example.com.com/">
-      Your Name Here
+  <author email="info@lightrains.com" href="http://lightrains.com/">
+      Lightrains Technolabs Pvt Ltd
     </author>
   <content src="index.html"/>
   <access origin="*"/>
