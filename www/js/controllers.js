@@ -109,8 +109,9 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
     $cordovaClipboard
     .copy('0xc2593b43eef66488d45b014fc8f86830f08c48fd')
     .then(function () {
+      alert("copied");
       $scope.copied = "Address Copied Successfully...";
-    }, function () {
+    }, function () {alert("Not copied");
       $scope.copied = "Not able to copy...";
     });
   }
