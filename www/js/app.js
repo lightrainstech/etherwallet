@@ -64,12 +64,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js','ngStorage
         }
       }
     })
-    .state('app.statitics', {
-      url: '/statitics',
+    .state('app.marketcap', {
+      url: '/marketcap',
       views: {
         'menuContent': {
-          templateUrl: 'templates/statitics.html',
-          controller: 'StatiticsCtrl'
+          templateUrl: 'templates/marketcap.html',
+          controller: 'MarketCtrl'
         }
       }
     })

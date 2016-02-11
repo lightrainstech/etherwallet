@@ -1,0 +1,11 @@
+{
+  "name": "CordovaClipboard",
+  "_cacheHeaders": {
+    "Content-Type": "text/html; charset=utf-8"
+  },
+  "main": "index",
+  "_source": "https://github.com/VersoSolutions/CordovaClipboard",
+  "_target": "*",
+  "_originalSource": "https://github.com/VersoSolutions/CordovaClipboard",
+  "_direct": true
+}

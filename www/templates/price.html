@@ -12,7 +12,7 @@
   </div>
   <ion-list>
     <ion-item ng-repeat="item in items">
-      <h2>USD {{ item.usd }}</h2>
+      <h2>{{ item.usd | currency:'USD' }}</h2>
       <p>{{ item.time | date:'MM-dd-yyyy HH:MM:ss' }}</p>
     </ion-item>
   </ion-list>

@@ -28,7 +28,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   -o-background-size: cover;
   background-size: cover;
   position: fixed;
-    top: 35%;
+  top: 35%;
 }
 .centered {
   text-align: center;
@@ -50,5 +50,21 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 canvas#line.chart.chart-line {
   width: 100% !important;
   max-width: 100%;
-
+}
+.selectable {
+  -webkit-user-select: auto !important;
+  -khtml-user-select: auto !important;
+  -moz-user-select: auto !important;
+  -ms-user-select: auto !important;
+  -o-user-select: auto !important;
+  user-select: auto !important;
+}
+.cbf {
+  .item-toggle {
+    border: 0 none;
+  }
+}
+.mcapVal{
+  color: #3d3d3d;
+  font-size: 20px;
 }

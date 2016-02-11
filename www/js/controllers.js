@@ -1,4 +1,4 @@
-angular.module('starter.controllers', ['chart.js'])
+angular.module('starter.controllers', ['chart.js', 'ngCordova'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
@@ -37,10 +37,10 @@ angular.module('starter.controllers', ['chart.js'])
     $rootScope.show($ionicLoading);
 
     if(data.ifSave == true){
-        $localStorage.addSave = data.ethaddr;
-     } else {
-       $localStorage.addSave = "";
-       data.ethaddr = "";
+      $localStorage.addSave = data.ethaddr;
+    } else {
+      $localStorage.addSave = "";
+      data.ethaddr = "";
     }
 
     $http.get($rootScope.apiBase + '/account/' + data.ethaddr).then(function(resp) {
@@ -74,7 +74,6 @@ angular.module('starter.controllers', ['chart.js'])
     var labels = [], usds = [];
 
     angular.forEach(lastTen, function(num) {
-      console.dir(num.time);
       labels.push($filter('date')(num.time, "HH:mm"));
       usds.push(num.usd.toString());
     });
@@ -105,14 +104,56 @@ angular.module('starter.controllers', ['chart.js'])
 })
 
 
-.controller('CreditCtrl', function($scope, $http, $rootScope) {
-  // $scope.copyThis = function () {
-  //   $cordovaClipboard
-  //   .copy('0xc2593b43eef66488d45b014fc8f86830f08c48fd')
-  //   .then(function () {
-  //     $scope.copied = "Address Copied Successfully...";
-  //   }, function () {
-  //     $scope.copied = "Not able to copy...";
-  //   });
-  // }
+.controller('CreditCtrl', function($scope, $http, $rootScope, $cordovaClipboard) {
+  $scope.copyThis = function () {
+    $cordovaClipboard
+    .copy('0xc2593b43eef66488d45b014fc8f86830f08c48fd')
+    .then(function () {
+      $scope.copied = "Address Copied Successfully...";
+    }, function () {
+      $scope.copied = "Not able to copy...";
+    });
+  }
+})
+
+.controller('MarketCtrl', function($scope, $http, $localStorage, $rootScope, $ionicLoading) {
+  var socket = io.connect('http://socket.coincap.io');
+  $scope.values = [];
+  $rootScope.show($ionicLoading);
+
+  $scope.doRefresh = function() {
+    $rootScope.show($ionicLoading);
+    $http.get('http://www.coincap.io/history/1day/ETH').then(function(resp) {
+      $rootScope.hide($ionicLoading);
+      $scope.$broadcast('scroll.refreshComplete');
+      $scope.values.mktcap = resp.data.market_cap[0][1];
+      $scope.values.price = resp.data.price[0][1];
+      $scope.values.volume = resp.data.volume[0][1];
+    });
+  };
+
+  $http.get('http://www.coincap.io/history/1day/ETH').then(function(resp) {
+    $rootScope.hide($ionicLoading);
+    $scope.values.mktcap = resp.data.market_cap[0][1];
+    $scope.values.price = resp.data.price[0][1];
+    $scope.values.volume = resp.data.volume[0][1];
+  });
+  socket.on('trade', function (tradeMsg) {
+    $localStorage.marketcap = tradeMsg;
+    console.log(tradeMsg);
+    if(tradeMsg.message.coin === "ETH") {
+      $scope.values.short = tradeMsg.message.msg.short;
+      $scope.values.long = tradeMsg.message.msg.long;
+      $scope.values.time = tradeMsg.message.msg.time;
+      $scope.values.cap24hrChange = tradeMsg.message.msg.cap24hrChange;
+      $scope.values.price = tradeMsg.message.msg.price;
+      $scope.values.mktcap = tradeMsg.message.msg.mktcap;
+      $scope.values.supply = tradeMsg.message.msg.supply;
+      $scope.values.volume = tradeMsg.message.msg.volume;
+    }
+  })
+  // socket.on('global', function (globalMsg) {
+  //   console.log(globalMsg);
+  // })
+
 });

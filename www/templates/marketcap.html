@@ -1,0 +1,31 @@
+<ion-view view-title="ETH Market Capital">
+  <ion-content>
+
+    <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()">
+    </ion-refresher>
+
+    <ul class="list">
+      <li class="item">
+        Market Capital
+        <span class="item-note mcapVal">
+          {{values.mktcap | currency:'USD'}}
+        </span>
+      </li>
+
+      <li class="item">
+        Price
+        <span class="item-note mcapVal">
+          {{values.price | currency:'USD'}}
+        </span>
+      </li>
+
+      <li class="item">
+        Volume
+        <span class="item-note mcapVal">
+          {{values.volume}}
+        </span>
+      </li>
+
+    </ul>
+  </ion-content>
+</ion-view>
