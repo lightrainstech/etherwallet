@@ -143,6 +143,11 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
     $scope.values.price = resp.data.price[0][1];
     $scope.values.volume = resp.data.volume[0][1];
   });
+
+  socket.on('global', function (globalMsg) {
+        console.log(globalMsg);
+    })
+    
   socket.on('trade', function (tradeMsg) {
     $localStorage.marketcap = tradeMsg;
     console.log(tradeMsg);

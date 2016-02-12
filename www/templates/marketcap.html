@@ -8,21 +8,28 @@
       <li class="item">
         Market Capital
         <span class="item-note mcapVal">
-          {{values.mktcap | currency:'USD'}}
+          {{values.mktcap | currency:'USD' }}
         </span>
       </li>
 
       <li class="item">
         Price
         <span class="item-note mcapVal">
-          {{values.price | currency:'USD'}}
+          {{values.price | currency:'USD' }}
         </span>
       </li>
 
       <li class="item">
-        Volume
+        Volume (24h)
         <span class="item-note mcapVal">
-          {{values.volume}}
+          {{values.volume | currency:'USD' }}
+        </span>
+      </li>
+
+      <li class="item" ng-show="values.supply">
+        Available Supply
+        <span class="item-note mcapVal">
+          {{values.supply }} ETH
         </span>
       </li>
 
