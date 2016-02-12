@@ -36,16 +36,16 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js','ngStorage
 })
 
 .config(function($ionicNativeTransitionsProvider){
-    $ionicNativeTransitionsProvider.setDefaultTransition({
-        type: 'flip',
-        direction: 'left'
-    });
+  $ionicNativeTransitionsProvider.setDefaultTransition({
+    type: 'flip',
+    direction: 'left'
+  });
 })
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
 
-    .state('app', {
+  .state('app', {
     url: '/app',
     abstract: true,
     templateUrl: 'templates/menu.html',
@@ -63,53 +63,53 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js','ngStorage
   })
 
   .state('app.price', {
-      url: '/price',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/price.html',
-          controller: 'PriceCtrl'
-        }
+    url: '/price',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/price.html',
+        controller: 'PriceCtrl'
       }
-    })
-    .state('app.marketcap', {
-      url: '/marketcap',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/marketcap.html',
-          controller: 'MarketCtrl'
-        }
+    }
+  })
+  .state('app.marketcap', {
+    url: '/marketcap',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/marketcap.html',
+        controller: 'MarketCtrl'
       }
-    })
+    }
+  })
 
-    .state('app.credits', {
-      url: '/credits',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/credits.html',
-          controller: 'CreditCtrl'
-        }
+  .state('app.credits', {
+    url: '/credits',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/credits.html',
+        controller: 'CreditCtrl'
       }
-    })
+    }
+  })
 
-    .state('app.transactions', {
-      url: '/transactions',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/transactions.html',
-          controller: 'TransactionsCtrl'
-        }
+  .state('app.transactions', {
+    url: '/transactions',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/transactions.html',
+        controller: 'TransactionsCtrl'
       }
-    })
+    }
+  })
 
-    .state('app.send', {
-      url: '/send',
-      views: {
-        'menuContent': {
-          templateUrl: 'templates/send.html',
-          controller: 'sendCtrl'
-        }
+  .state('app.send', {
+    url: '/send',
+    views: {
+      'menuContent': {
+        templateUrl: 'templates/send.html',
+        controller: 'sendCtrl'
       }
-    })
+    }
+  })
 
   .state('app.block', {
     url: '/block/:playlistId',
