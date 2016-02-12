@@ -104,17 +104,18 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
 })
 
 
-.controller('CreditCtrl', function($scope, $http, $rootScope, $cordovaClipboard) {
-  $scope.copyThis = function () {
-    $cordovaClipboard
-    .copy('0xc2593b43eef66488d45b014fc8f86830f08c48fd')
-    .then(function () {
-      alert("copied");
-      $scope.copied = "Address Copied Successfully...";
-    }, function () {alert("Not copied");
-      $scope.copied = "Not able to copy...";
-    });
-  }
+.controller('CreditCtrl', function($scope, $http, $rootScope) {
+// .controller('CreditCtrl', function($scope, $http, $rootScope, $cordovaClipboard) {
+  // $scope.copyThis = function () {
+  //   $cordovaClipboard
+  //   .copy('0xc2593b43eef66488d45b014fc8f86830f08c48fd')
+  //   .then(function () {
+  //     alert("copied");
+  //     $scope.copied = "Address Copied Successfully...";
+  //   }, function () {alert("Not copied");
+  //     $scope.copied = "Not able to copy...";
+  //   });
+  // }
 })
 
 .controller('sendCtrl', function($scope, $http) {
@@ -147,7 +148,7 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
   socket.on('global', function (globalMsg) {
         console.log(globalMsg);
     })
-    
+
   socket.on('trade', function (tradeMsg) {
     $localStorage.marketcap = tradeMsg;
     console.log(tradeMsg);
