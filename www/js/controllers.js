@@ -45,7 +45,6 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
 
     $http.get($rootScope.apiBase + '/account/' + data.ethaddr).then(function(resp) {
       $rootScope.hide($ionicLoading);
-      data.ethaddr = '';
       if ( typeof(resp.data.data[0]) !== 'undefined') {
         $scope.response = (resp.data.data[0].balance * 0.000000000000000001) + ' ETH';
         $scope.error = '';
@@ -53,7 +52,6 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
         $scope.error = "Sorry, Not a valid Ether Account";
       }
     }, function(err) {
-      data.ethaddr = '';
       $rootScope.hide($ionicLoading);
       $scope.error = "Some error occured, please try again.";
     })

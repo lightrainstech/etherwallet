@@ -83,33 +83,12 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js','ngStorage
       }
     }
   })
-
-  .state('app.transactions', {
-    url: '/transactions',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/transactions.html',
-        controller: 'TransactionsCtrl'
-      }
-    }
-  })
-
   .state('app.send', {
     url: '/send',
     views: {
       'menuContent': {
         templateUrl: 'templates/send.html',
         controller: 'sendCtrl'
-      }
-    }
-  })
-
-  .state('app.block', {
-    url: '/block/:playlistId',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/block.html',
-        controller: 'SingleBlockCtrl'
       }
     }
   });
