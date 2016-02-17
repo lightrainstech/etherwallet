@@ -31,7 +31,6 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
   $scope.data = {ethaddr : $localStorage.addSave,ifSave : ($localStorage.addSave) ? true : false};
 
   $scope.checkBalance = function(data){
-    $rootScope.show($ionicLoading);
 
     if(data.ifSave == true){
       $localStorage.addSave = data.ethaddr;
@@ -39,19 +38,26 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
       $localStorage.addSave = "";
       data.ethaddr = "";
     }
+    var address = data.ethaddr;
+    var isAddress = /^(0x)?[0-9a-f]{40}$/i.test(address);
+    if(isAddress === true) {
+      $rootScope.show($ionicLoading);
+      $http.get($rootScope.apiBase + '/account/' + data.ethaddr).then(function(resp) {
+        $rootScope.hide($ionicLoading);
+        if ( typeof(resp.data.data[0]) !== 'undefined') {
+          $scope.response = (resp.data.data[0].balance * 0.000000000000000001) + ' ETH';
+          $scope.error = '';
+        } else {
+          $scope.error = "Sorry, No transactions found.";
+        }
+      }, function(err) {
+        $rootScope.hide($ionicLoading);
+        $scope.error = "Some error occured, please try again.";
+      })
+    } else {
+      $scope.error = "Sorry, Not a valid Ether Account";
+    }
 
-    $http.get($rootScope.apiBase + '/account/' + data.ethaddr).then(function(resp) {
-      $rootScope.hide($ionicLoading);
-      if ( typeof(resp.data.data[0]) !== 'undefined') {
-        $scope.response = (resp.data.data[0].balance * 0.000000000000000001) + ' ETH';
-        $scope.error = '';
-      } else {
-        $scope.error = "Sorry, Not a valid Ether Account";
-      }
-    }, function(err) {
-      $rootScope.hide($ionicLoading);
-      $scope.error = "Some error occured, please try again.";
-    })
   }
 })
 
