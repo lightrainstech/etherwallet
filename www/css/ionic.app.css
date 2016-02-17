@@ -9739,7 +9739,6 @@ a.button {
   position: fixed;
   top: 35%;
 }
-
 .centered {
   text-align: center; }
 
@@ -9780,3 +9779,7 @@ canvas#line.chart.chart-line {
   font-size: 1.3rem; }
 
 .content-margin{margin-top: 43px;}
+
+.tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
+    color: red;
+}

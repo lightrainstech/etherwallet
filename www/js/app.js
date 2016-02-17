@@ -35,7 +35,8 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js','ngStorage
 
 })
 
-.config(function($stateProvider, $urlRouterProvider) {
+.config(function($stateProvider, $urlRouterProvider, $ionicConfigProvider) {
+  $ionicConfigProvider.tabs.position('bottom');
   $stateProvider
   $stateProvider
      .state('tabs', {
