@@ -133,21 +133,14 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
       $scope.values.volume = resp.data.volume[0][1];
     });
   };
-
   $http.get('http://www.coincap.io/history/1day/ETH').then(function(resp) {
     $rootScope.hide($ionicLoading);
     $scope.values.mktcap = resp.data.market_cap[0][1];
     $scope.values.price = resp.data.price[0][1];
     $scope.values.volume = resp.data.volume[0][1];
   });
-
-  socket.on('global', function (globalMsg) {
-    console.log(globalMsg);
-  })
-
   socket.on('trade', function (tradeMsg) {
     $localStorage.marketcap = tradeMsg;
-    console.log(tradeMsg);
     if(tradeMsg.message.coin === "ETH") {
       $scope.values.short = tradeMsg.message.msg.short;
       $scope.values.long = tradeMsg.message.msg.long;
