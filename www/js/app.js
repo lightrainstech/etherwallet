@@ -37,61 +37,59 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js','ngStorage
 
 .config(function($stateProvider, $urlRouterProvider) {
   $stateProvider
+  $stateProvider
+     .state('tabs', {
+       url: "/tab",
+       abstract: true,
+       templateUrl: "templates/tabs.html"
+     })
+     .state('tabs.checkbalance', {
+       url: "/checkbalance",
+       views: {
+         'home-tab': {
+           templateUrl: "templates/checkbalance.html",
+           controller: 'ChkBalanceCtrl'
+         }
+       }
+     })
+     .state('tabs.price', {
+       url: "/price",
+       views: {
+         'price-tab': {
+           templateUrl: "templates/price.html",
+           controller: 'PriceCtrl'
+         }
+       }
+     })
+     .state('tabs.marketcap', {
+       url: "/marketcap",
+       views: {
+         'marketcap-tab': {
+           templateUrl: "templates/marketcap.html",
+           controller: 'MarketCtrl'
+         }
+       }
+     })
+     .state('tabs.credits', {
+       url: "/credits",
+       views: {
+         'credits-tab': {
+           templateUrl: 'templates/credits.html',
+           controller: 'CreditCtrl'
+         }
+       }
+     })
+     .state('tabs.send', {
+       url: "/send",
+       views: {
+         'send-tab': {
+           templateUrl: 'templates/send.html',
+           controller: 'sendCtrl'
+         }
+       }
+     });
 
-  .state('app', {
-    url: '/app',
-    abstract: true,
-    templateUrl: 'templates/menu.html',
-    controller: 'AppCtrl'
-  })
 
-  .state('app.checkbalance', {
-    url: '/checkbalance',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/checkbalance.html',
-        controller: 'ChkBalanceCtrl'
-      }
-    }
-  })
-
-  .state('app.price', {
-    url: '/price',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/price.html',
-        controller: 'PriceCtrl'
-      }
-    }
-  })
-  .state('app.marketcap', {
-    url: '/marketcap',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/marketcap.html',
-        controller: 'MarketCtrl'
-      }
-    }
-  })
-
-  .state('app.credits', {
-    url: '/credits',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/credits.html',
-        controller: 'CreditCtrl'
-      }
-    }
-  })
-  .state('app.send', {
-    url: '/send',
-    views: {
-      'menuContent': {
-        templateUrl: 'templates/send.html',
-        controller: 'sendCtrl'
-      }
-    }
-  });
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/app/checkbalance');
+  $urlRouterProvider.otherwise('/tab/checkbalance');
 });

@@ -9737,7 +9737,8 @@ a.button {
   -o-background-size: cover;
   background-size: cover;
   position: fixed;
-  top: 35%; }
+  top: 35%;
+}
 
 .centered {
   text-align: center; }
@@ -9777,3 +9778,5 @@ canvas#line.chart.chart-line {
 
 .donate {
   font-size: 1.3rem; }
+
+.content-margin{margin-top: 43px;}

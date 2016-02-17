@@ -21,7 +21,6 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
 // Include all of Ionic
 @import "www/lib/ionic/scss/ionic";
 
-
 .center-middle {
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -71,3 +70,5 @@ canvas#line.chart.chart-line {
 .donate {
   font-size: 1.3rem;
 }
+
+.content-margin{margin-top: 43px;}
