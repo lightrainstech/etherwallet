@@ -64,41 +64,43 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
 
   $rootScope.show($ionicLoading);
 
+  $scope.doRefresh = function() {
+    $http.get($rootScope.apiBase + '/statistics/price').then(function(resp) {
+      var lastThirty = resp.data.data.reverse().slice(0, 50);
+      var lastTen = lastThirty.slice(0, 8);
+      lastTen = lastTen.reverse();
+      var labels = [], usds = [];
+
+      angular.forEach(lastTen, function(num) {
+        labels.push($filter('date')(num.time, "HH:mm"));
+        usds.push(num.usd.toString());
+      });
+
+      $scope.labels = labels;
+      $scope.data = [usds];
+      $scope.items = lastThirty;
+      var change = lastThirty[0].usd - lastThirty[1].usd;
+      $scope.lastusd = (change >= 0) ? '$ ' + lastThirty[0].usd+ ' <span class="ion-android-arrow-dropup up"></span>' : '$ ' + lastThirty[0].usd + ' <span class="ion-android-arrow-dropdown down"></span>';
+    });
+  };
 
   $http.get($rootScope.apiBase + '/statistics/price').then(function(resp) {
     $rootScope.hide($ionicLoading);
-
     var lastThirty = resp.data.data.reverse().slice(0, 50);
     var lastTen = lastThirty.slice(0, 8);
     lastTen = lastTen.reverse();
     var labels = [], usds = [];
-
     angular.forEach(lastTen, function(num) {
       labels.push($filter('date')(num.time, "HH:mm"));
       usds.push(num.usd.toString());
     });
-
     $scope.labels = labels;
     $scope.data = [usds];
-
-    // $scope.onClick = function (points, evt) {
-    //   var clicked = points[0].value;
-    //   var change = lastThirty[0].usd - clicked;
-    //   $scope.lastusd = (change >= 0) ? '$ ' + clicked + ' <span class="ion-android-arrow-dropup up"></span>' : '$ ' + clicked + ' <span class="ion-android-arrow-dropdown down"></span>';
-    //   setTimeout(function(){
-    //     var nchange = lastThirty[0].usd - lastThirty[1].usd;
-    //     console.log(nchange);
-    //     $scope.lastusd = (nchange >= 0) ? '$ ' + lastThirty[0].usd+ ' <span class="ion-android-arrow-dropup up"></span>' : '$ ' + lastThirty[0].usd + ' <span class="ion-android-arrow-dropdown down"></span>';
-    //   },2000);
-    // };
-
-
     $scope.items = lastThirty;
     var change = lastThirty[0].usd - lastThirty[1].usd;
     $scope.lastusd = (change >= 0) ? '$ ' + lastThirty[0].usd+ ' <span class="ion-android-arrow-dropup up"></span>' : '$ ' + lastThirty[0].usd + ' <span class="ion-android-arrow-dropdown down"></span>';
   }, function(err) {
     console.error('ERR', err);
-    // err.status will contain the status code
   })
 
 })
