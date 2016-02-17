@@ -2,9 +2,6 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
 
 .controller('AppCtrl', function($scope, $ionicModal, $timeout) {
 
-  // Form data for the login modal
-  $scope.loginData = {};
-
 })
 
 .controller('StatiticsCtrl', function($scope, $http, $rootScope, $ionicLoading) {
@@ -64,16 +61,15 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
 
   $scope.doRefresh = function() {
     $http.get($rootScope.apiBase + '/statistics/price').then(function(resp) {
+      $scope.$broadcast('scroll.refreshComplete');
       var lastThirty = resp.data.data.reverse().slice(0, 50);
       var lastTen = lastThirty.slice(0, 8);
       lastTen = lastTen.reverse();
       var labels = [], usds = [];
-
       angular.forEach(lastTen, function(num) {
         labels.push($filter('date')(num.time, "HH:mm"));
         usds.push(num.usd.toString());
       });
-
       $scope.labels = labels;
       $scope.data = [usds];
       $scope.items = lastThirty;
@@ -105,7 +101,7 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
 
 
 .controller('CreditCtrl', function($scope, $http, $rootScope) {
-// .controller('CreditCtrl', function($scope, $http, $rootScope, $cordovaClipboard) {
+  // .controller('CreditCtrl', function($scope, $http, $rootScope, $cordovaClipboard) {
   // $scope.copyThis = function () {
   //   $cordovaClipboard
   //   .copy('0xc2593b43eef66488d45b014fc8f86830f08c48fd')
@@ -137,21 +133,14 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
       $scope.values.volume = resp.data.volume[0][1];
     });
   };
-
   $http.get('http://www.coincap.io/history/1day/ETH').then(function(resp) {
     $rootScope.hide($ionicLoading);
     $scope.values.mktcap = resp.data.market_cap[0][1];
     $scope.values.price = resp.data.price[0][1];
     $scope.values.volume = resp.data.volume[0][1];
   });
-
-  socket.on('global', function (globalMsg) {
-        console.log(globalMsg);
-    })
-
   socket.on('trade', function (tradeMsg) {
     $localStorage.marketcap = tradeMsg;
-    console.log(tradeMsg);
     if(tradeMsg.message.coin === "ETH") {
       $scope.values.short = tradeMsg.message.msg.short;
       $scope.values.long = tradeMsg.message.msg.long;

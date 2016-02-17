@@ -2,11 +2,9 @@
   <h1 class="title">ETH Market Capital</h1>
 </div>
 <ion-view view-title="ETH Market Capital">
-  <ion-content class="content-margin">
-
+  <ion-content class="has-header">
     <ion-refresher pulling-text="Pull to refresh" on-refresh="doRefresh()">
     </ion-refresher>
-
     <ul class="list">
       <li class="item">
         Market Capital
@@ -14,28 +12,24 @@
           {{values.mktcap | currency:'USD' }}
         </span>
       </li>
-
       <li class="item">
         Price
         <span class="item-note mcapVal">
           {{values.price | currency:'USD' }}
         </span>
       </li>
-
       <li class="item">
         Volume (24h)
         <span class="item-note mcapVal">
           {{values.volume | currency:'USD' }}
         </span>
       </li>
-
       <li class="item" ng-show="values.supply">
         Available Supply
         <span class="item-note mcapVal">
           {{values.supply }} ETH
         </span>
       </li>
-
     </ul>
   </ion-content>
 </ion-view>
