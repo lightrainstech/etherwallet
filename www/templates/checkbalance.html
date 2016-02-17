@@ -1,11 +1,9 @@
 <div class="bar bar-header">
   <h1 class="title">Check Balance</h1>
 </div>
-
 <ion-view view-title="Check Balance">
-  <ion-content class="center-middle cbf">
+  <ion-content class="center-middle cbf has-header">
     <form >
-
       <div class="list">
         <label class="item item-input item-stacked-label">
           <span class="input-label">Ether Account Address</span>
@@ -15,26 +13,21 @@
       <div class="item item-toggle">
         Save Address
         <label class="toggle toggle-assertive">
-          <!-- <input type="checkbox" ng-model="data.ifSave" checked="checked"> -->
           <input type='checkbox' ng-model='data.ifSave'>
           <div class="track">
             <div class="handle"></div>
           </div>
         </label>
       </div>
-
       <div class="padding">
         <button class="button button-block button-positive" ng-click="checkBalance(data)">Check Balance</button>
       </div>
     </form>
-
     <div class="padding centered balancetxt" ng-show="response">
       {{ response }}
     </div>
-
     <div class="padding centered red" ng-show="error">
       {{ error }}
     </div>
-
   </ion-content>
 </ion-view>

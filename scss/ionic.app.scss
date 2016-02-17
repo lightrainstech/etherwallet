@@ -27,7 +27,7 @@ $ionicons-font-path: "../lib/ionic/fonts" !default;
   -o-background-size: cover;
   background-size: cover;
   position: fixed;
-  top: 35%;
+  top: 30%;
 }
 .centered {
   text-align: center;
@@ -70,9 +70,6 @@ canvas#line.chart.chart-line {
 .donate {
   font-size: 1.3rem;
 }
-
-.content-margin{margin-top: 43px;}
-
 .tab-item.tab-item-active, .tab-item.active, .tab-item.activated {
-    color: red;
+  color: red;
 }
