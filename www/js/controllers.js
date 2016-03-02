@@ -296,16 +296,16 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
         $http.get('http://www.coincap.io/history/1day/ETH').then(function(resp) {
           $rootScope.hide($ionicLoading);
           $scope.$broadcast('scroll.refreshComplete');
-          $scope.values.mktcap = resp.data.market_cap[0][1];
+          $scope.values.mktcap = resp.data.market_cap.sort().pop()[1];
           $scope.values.price = resp.data.price.sort().pop()[1];
-          $scope.values.volume = resp.data.volume[0][1];
+          $scope.values.volume = resp.data.volume.sort().pop()[1];
         });
       };
       $http.get('http://www.coincap.io/history/1day/ETH').then(function(resp) {
         $rootScope.hide($ionicLoading);
-        $scope.values.mktcap = resp.data.market_cap[0][1];
+        $scope.values.mktcap = resp.data.market_cap.sort().pop()[1];
         $scope.values.price = resp.data.price.sort().pop()[1];
-        $scope.values.volume = resp.data.volume[0][1];
+        $scope.values.volume = resp.data.volume.sort().pop()[1];
       });
       socket.on('trade', function (tradeMsg) {
         $localStorage.marketcap = tradeMsg;
