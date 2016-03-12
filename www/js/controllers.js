@@ -120,6 +120,13 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
   // }
 })
 
+.controller('WalletCtrl', function($scope, $http, $rootScope) {
+
+  $scope.newWallet = 1;
+
+})
+
+
 .controller('sendCtrlOld', function($scope, $http, $localStorage, $rootScope, $ionicLoading, $timeout, $ionicPopup) {
 
   $scope.show = function() {

@@ -1,4 +1,4 @@
-angular.module('starter', ['ionic', 'starter.controllers', 'chart.js','ngStorage'])
+angular.module('starter', ['ionic', 'starter.controllers','starter.services','chart.js','ngStorage'])
 
 .run(function($ionicPlatform, $rootScope, $ionicLoading) {
   $ionicPlatform.ready(function() {
@@ -38,12 +38,21 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js','ngStorage
     abstract: true,
     templateUrl: "templates/tabs.html"
   })
-  .state('tabs.checkbalance', {
-    url: "/checkbalance",
+  // .state('tabs.checkbalance', {
+  //   url: "/checkbalance",
+  //   views: {
+  //     'home-tab': {
+  //       templateUrl: "templates/checkbalance.html",
+  //       controller: 'ChkBalanceCtrl'
+  //     }
+  //   }
+  // })
+  .state('tabs.wallet', {
+    url: "/wallet",
     views: {
       'home-tab': {
-        templateUrl: "templates/checkbalance.html",
-        controller: 'ChkBalanceCtrl'
+        templateUrl: "templates/wallet.html",
+        controller: 'WalletCtrl'
       }
     }
   })
@@ -86,5 +95,5 @@ angular.module('starter', ['ionic', 'starter.controllers', 'chart.js','ngStorage
 
 
   // if none of the above states are matched, use this as the fallback
-  $urlRouterProvider.otherwise('/tab/checkbalance');
+  $urlRouterProvider.otherwise('/tab/wallet');
 });
