@@ -1,3 +1,9 @@
+// Ionic Starter App
+//set global and provider
+web3 = new Web3();
+if (typeof localStorage.NodeHost == 'undefined') {
+  localStorage.NodeHost = "http://37.139.31.106:8545";
+}
 angular.module('starter', ['ionic', 'starter.controllers','starter.services','chart.js','ngStorage'])
 
 .run(function($ionicPlatform, $rootScope, $ionicLoading) {

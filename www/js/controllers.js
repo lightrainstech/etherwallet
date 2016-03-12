@@ -120,9 +120,91 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
   // }
 })
 
-.controller('WalletCtrl', function($scope, $http, $rootScope) {
+.controller('WalletCtrl', function($scope,$state, AppService, $q, PasswordPopup, Transactions, Friends, Items) {
 
-  $scope.newWallet = 1;
+   window.refresh = function () {
+      $scope.balance = AppService.balance();
+      $scope.account = AppService.account();
+      $scope.qrcodeString = AppService.account();
+
+      //temp
+      $scope.transactions = Transactions.all();
+      localStorage.Transactions = JSON.stringify($scope.transactions);
+    };
+   window.customPasswordProvider = function (callback) {
+      var pw;
+      PasswordPopup.open("Inserisci Una Password", "Inserisci La tua password").then(
+        function (result) {
+          pw = result;
+          if (pw != undefined) {
+            try {
+              callback(null, pw);
+
+            } catch (err) {
+              var alertPopup = $ionicPopup.alert({
+                title: 'Error',
+                template: err.message
+
+              });
+              alertPopup.then(function (res) {
+                console.log(err);
+              });
+            }
+          }
+        },
+        function (err) {
+          pw = "";
+        })
+    };
+
+  if (typeof localStorage.AppKeys == 'undefined') {
+    $scope.hasLogged = false;
+    var extraEntropy = "LR Etherwallet";
+    var randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
+    console.log('randomSeed: ' + randomSeed);
+    var infoString = 'Your keystore seed is: "' + randomSeed +
+        '". Please write it down on paper or in a password manager, you will need it to access your keystore. Do not let anyone see this seed or they can take your Ether. ' +
+        'Please enter a password to encrypt your seed and you account while in the mobile phone.';
+
+  } else {
+      //retreive from localstorage
+      var ls = JSON.parse(localStorage.AppKeys);
+      code = JSON.parse(localStorage.AppCode).code;
+      $scope.hasLogged = JSON.parse(localStorage.HasLogged);
+      $scope.transactions = JSON.parse(localStorage.Transactions);
+
+      global_keystore = new lightwallet.keystore.deserialize(ls.data);
+      global_keystore.passwordProvider = customPasswordProvider;
+      AppService.setWeb3Provider(global_keystore);
+      $scope.qrcodeString = AppService.account();
+      refresh();
+    }
+
+  $scope.Login = function (pw, cod) {
+
+    password = pw;
+    code = cod;
+
+    global_keystore = new lightwallet.keystore(randomSeed, password);
+    console.log(global_keystore);
+    global_keystore.generateNewAddress(password, 1);
+    global_keystore.passwordProvider = customPasswordProvider;
+
+    AppService.setWeb3Provider(global_keystore);
+
+    localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
+    localStorage.AppCode = JSON.stringify({code: code});
+    localStorage.HasLogged = JSON.stringify(true);
+    localStorage.Transactions = JSON.stringify({});
+    localStorage.Friends = JSON.stringify($scope.friends);
+    localStorage.Items = JSON.stringify($scope.items);
+
+    $scope.hasLogged = true;
+    $scope.qrcodeString = AppService.account();
+
+    refresh();
+
+  }
 
 })
 
