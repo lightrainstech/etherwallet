@@ -129,6 +129,8 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
 
       //temp
       $scope.transactions = Transactions.all();
+      console.log($scope.transactions);
+      console.log(Object.keys($scope.transactions).length);
       localStorage.Transactions = JSON.stringify($scope.transactions);
     };
    window.customPasswordProvider = function (callback) {
@@ -156,6 +158,11 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
           pw = "";
         })
     };
+
+  $scope.isEmpty = function (obj) {
+      for (var i in obj) if (obj.hasOwnProperty(i)) return false;
+      return true;
+  };
 
   if (typeof localStorage.AppKeys == 'undefined') {
     $scope.hasLogged = false;
@@ -191,7 +198,7 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
     global_keystore.passwordProvider = customPasswordProvider;
 
     AppService.setWeb3Provider(global_keystore);
-
+    consolelog(global_keystore);
     localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
     localStorage.AppCode = JSON.stringify({code: code});
     localStorage.HasLogged = JSON.stringify(true);
@@ -208,172 +215,160 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
 
 })
 
+.controller('sendCtrl', function($scope, $stateParams, $ionicModal, $state, $ionicPopup, $cordovaBarcodeScanner, AppService, Transactions) {
 
-.controller('sendCtrlOld', function($scope, $http, $localStorage, $rootScope, $ionicLoading, $timeout, $ionicPopup) {
+    window.refresh = function () {
+      $scope.balance = AppService.balance();
+      $scope.account = AppService.account();
+      $scope.qrcodeString = AppService.account();
 
-  $scope.show = function() {
-    $ionicLoading.show({
-      template: '<p>Loading...</p><ion-spinner></ion-spinner>'
-    });
-  };
-  $scope.hide = function(){
-    $ionicLoading.hide();
-  };
+      //temp
+      $scope.transactions = Transactions.all();
+      console.log($scope.transactions);
+      console.log(Object.keys($scope.transactions).length);
+      localStorage.Transactions = JSON.stringify($scope.transactions);
+    };
+     window.customPasswordProvider = function (callback) {
+      var pw;
+      PasswordPopup.open("Inserisci Una Password", "Inserisci La tua password").then(
+        function (result) {
+          pw = result;
+          if (pw != undefined) {
+            try {
+              callback(null, pw);
 
-  $scope.shiftNow = function(data){
-    var postData = {"btc": data.btc, "withdrawal": data.eth, cmail: data.cmail, "pair": "btc_eth", "returnAddress": data.btc, "apiKey": "8102aebfb2a73e643f88fd1e7b20cfef5bc7f3d1ea2e0d3a53a7657c9ff192724894dc2660c99783c0d145ce4de720301253265b2f6da381bae64b63e041f615"}
+            } catch (err) {
+              var alertPopup = $ionicPopup.alert({
+                title: 'Error',
+                template: err.message
 
-    $http.post('https://shapeshift.io/shift', postData).then(function(resp) {
-      console.log(resp.data);
-      if(resp.data.error) {
-        $scope.show = function() {
-          $ionicLoading.show({
-            template: '<p>'+resp.data.error+'</p><ion-spinner></ion-spinner>'
+              });
+              alertPopup.then(function (res) {
+                console.log(err);
+              });
+            }
+          }
+        },
+        function (err) {
+          pw = "";
+        })
+    };
+  if (typeof localStorage.AppKeys == 'undefined') {
+    $scope.hasLogged = false;
+    var extraEntropy = "LR Etherwallet";
+    var randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
+    console.log('randomSeed: ' + randomSeed);
+    var infoString = 'Your keystore seed is: "' + randomSeed +
+        '". Please write it down on paper or in a password manager, you will need it to access your keystore. Do not let anyone see this seed or they can take your Ether. ' +
+        'Please enter a password to encrypt your seed and you account while in the mobile phone.';
+
+  } else {
+      //retreive from localstorage
+      var ls = JSON.parse(localStorage.AppKeys);
+      code = JSON.parse(localStorage.AppCode).code;
+      $scope.hasLogged = JSON.parse(localStorage.HasLogged);
+      $scope.transactions = JSON.parse(localStorage.Transactions);
+
+      global_keystore = new lightwallet.keystore.deserialize(ls.data);
+      global_keystore.passwordProvider = customPasswordProvider;
+      AppService.setWeb3Provider(global_keystore);
+      $scope.qrcodeString = AppService.account();
+      refresh();
+    }
+
+    var TrueException = {};
+    var FalseException = {};
+
+    $scope.fromAddressBook = false;
+
+    if($stateParams.addr){
+      $scope.addrTo = $stateParams.addr;
+      $scope.fromAddressBook = true;
+    }else {
+      $scope.fromAddressBook = false;
+    }
+
+    $scope.sendCoins = function (addr, amount) {
+      var fromAddr = $scope.account;
+      var toAddr = addr;
+      var valueEth = amount;
+      var value = parseFloat(valueEth) * 1.0e18;
+      var gasPrice = 50000000000;
+      var gas = 50000;
+
+      AppService.sendTransaction(fromAddr, toAddr, value, gasPrice, gas).then(
+        function (result) {
+          if (result[0] != undefined) {
+            var errorPopup = $ionicPopup.alert({
+              title: 'Error',
+              template: result[0]
+            });
+            errorPopup.then(function (res) {
+              console.log(res);
+            });
+          } else {
+            var successPopup = $ionicPopup.alert({
+              title: 'Transazione Inoltrata',
+              template: result[1]
+
+            });
+            successPopup.then(function (res) {
+              $state.go('app.transactions');
+            });
+            //save transaction
+            $scope.transactions = Transactions.save(fromAddr, toAddr, result[1], value, new Date().getTime());
+            refresh();
+          }
+        },
+        function (err) {
+          var alertPopup = $ionicPopup.alert({
+            title: 'Error',
+            template: err
+
           });
-        };
-        $scope.show($ionicLoading);
-        $timeout(function() {
-          data.btc = '',
-          data.eth = '';
-          data.cmail = '';
-          $scope.hide($ionicLoading);
-        }, 3000);
+          alertPopup.then(function (res) {
+            console.log(err);
+          });
+        });
+    };
 
+
+   $scope.confirmSend = function (addr, amount) {
+    var confirmPopup = $ionicPopup.confirm({
+      title: 'Send Coins',
+      template: 'Are you realy sure?'
+    });
+    confirmPopup.then(function (res) {
+      if (res) {
+        $scope.sendCoins(addr, amount);
       } else {
-        $scope.show = function() {
-          $ionicLoading.show({
-            template: '<p class="alert-success ion-ios-checkmark-outline"></p>'
-          });
-        };
-        $scope.show($ionicLoading);
-        $timeout(function() {
-          data.btc = '',
-          data.eth = '';
-          data.cmail = '';
-          $scope.hide($ionicLoading);
-        }, 2000);
+        console.log('Send coins aborted');
       }
     });
   };
+
+  $scope.checkAddress = function (address) {
+    try {
+      angular.forEach(this.friends, function(value, key) {
+        if(value.addr != address){
+          throw TrueException;
+        }else {
+          throw FalseException;
+        }
+      })
+    }catch (e){
+      if(e === TrueException){
+        $scope.toAdd = true;
+      }else if(e===FalseException) {
+        $scope.toAdd = false;
+      }
+    }
+  }
+
+  $scope.clearAddrTo = function(){
+    $scope.fromAddressBook = false;
+  }
 })
-
-
-.controller('sendCtrl', function($scope, $http, $localStorage, $rootScope, $ionicLoading, $timeout, $ionicPopup) {
-
-  var web3 = new Web3();
-  var global_keystore;
-  $scope.setWeb3Provider = function(keystore) {
-    var web3Provider = new HookedWeb3Provider({
-      host: "http://localhost:8545",
-      transaction_signer: keystore
-    });
-    web3.setProvider(web3Provider);
-  }
-
-  $scope.newAddresses = function(password) {
-
-    if (password == '') {
-      password = prompt('Enter password to retrieve addresses', 'Password');
-    }
-    var numAddr = parseInt(document.getElementById('numAddr').value)
-    lightwallet.keystore.deriveKeyFromPassword(password, function(err, pwDerivedKey) {
-      global_keystore.generateNewAddress(pwDerivedKey, numAddr);
-      var addresses = global_keystore.getAddresses();
-      document.getElementById('sendFrom').innerHTML = ''
-      document.getElementById('functionCaller').innerHTML = ''
-      for (var i=0; i<addresses.length; ++i) {
-        document.getElementById('sendFrom').innerHTML += '<option value="' + addresses[i] + '">' + addresses[i] + '</option>'
-        document.getElementById('functionCaller').innerHTML += '<option value="' + addresses[i] + '">' + addresses[i] + '</option>'
-      }
-      $scope.getBalances();
-    })
-  }
-  $scope.getBalances = function() {
-
-    var addresses = global_keystore.getAddresses();
-    document.getElementById('addr').innerHTML = 'Retrieving addresses...'
-    async.map(addresses, web3.eth.getBalance, function(err, balances) {
-      async.map(addresses, web3.eth.getTransactionCount, function(err, nonces) {
-        document.getElementById('addr').innerHTML = ''
-        for (var i=0; i<addresses.length; ++i) {
-          document.getElementById('addr').innerHTML += '<div>' + addresses[i] + ' (Bal: ' + (balances[i] / 1.0e18) + ' ETH, Nonce: ' + nonces[i] + ')' + '</div>'
-        }
-      })
-    })
-  }
-  $scope.setSeed = function () {
-    var password = prompt('Enter Password to encrypt your seed', 'Password');
-
-    lightwallet.keystore.deriveKeyFromPassword(password, function(err, pwDerivedKey) {
-      global_keystore = new lightwallet.keystore(
-        document.getElementById('seed').value,
-        pwDerivedKey);
-        document.getElementById('seed').value = ''
-
-        $scope.newAddresses(password);
-        $scope.setWeb3Provider(global_keystore);
-
-        $scope.getBalances();
-      })
-    }
-    $scope.newWallet = function() {
-      var extraEntropy = document.getElementById('userEntropy').value;
-      document.getElementById('userEntropy').value = '';
-      var randomSeed = lightwallet.keystore.generateRandomSeed(extraEntropy);
-      var infoString = 'Your new wallet seed is: "' + randomSeed +
-      '". Please write it down on paper or in a password manager, you will need it to access your wallet. Do not let anyone see this seed or they can take your Ether. ' +
-      'Please enter a password to encrypt your seed while in the browser.'
-      var password = prompt(infoString, 'Password');
-      lightwallet.keystore.deriveKeyFromPassword(password, function(err, pwDerivedKey) {
-        global_keystore = new lightwallet.keystore(
-          randomSeed,
-          pwDerivedKey);
-
-          $scope.newAddresses(password);
-          $scope.setWeb3Provider(global_keystore);
-          $scope.getBalances();
-        })
-      }
-      $scope.showSeed = function() {
-        var password = prompt('Enter password to show your seed. Do not let anyone else see your seed.', 'Password');
-        lightwallet.keystore.deriveKeyFromPassword(password, function(err, pwDerivedKey) {
-          var seed = global_keystore.getSeed(pwDerivedKey);
-          alert('Your seed is: "' + seed + '". Please write it down.')
-        })
-      }
-      $scope.sendEth = function() {
-        var fromAddr = document.getElementById('sendFrom').value
-        var toAddr = document.getElementById('sendTo').value
-        var valueEth = document.getElementById('sendValueAmount').value
-        var value = parseFloat(valueEth)*1.0e18
-        var gasPrice = 50000000000
-        var gas = 50000
-        web3.eth.sendTransaction({from: fromAddr, to: toAddr, value: value, gasPrice: gasPrice, gas: gas}, function (err, txhash) {
-          console.log('error: ' + err)
-          console.log('txhash: ' + txhash)
-        })
-      }
-      $scope.functionCall = function() {
-        var fromAddr = document.getElementById('functionCaller').value
-        var contractAddr = document.getElementById('contractAddr').value
-        var abi = JSON.parse(document.getElementById('contractAbi').value)
-        var contract = web3.eth.contract(abi).at(contractAddr)
-        var functionName = document.getElementById('functionName').value
-        var args = JSON.parse('[' + document.getElementById('functionArgs').value + ']')
-        var valueEth = document.getElementById('sendValueAmount').value
-        var value = parseFloat(valueEth)*1.0e18
-        var gasPrice = 50000000000
-        var gas = 3141592
-        args.push({from: fromAddr, value: value, gasPrice: gasPrice, gas: gas})
-        var callback = function(err, txhash) {
-          console.log('error: ' + err)
-          console.log('txhash: ' + txhash)
-        }
-        args.push(callback)
-        contract[functionName].apply(this, args)
-      }
-
-    })
 
     .controller('MarketCtrl', function($scope, $http, $localStorage, $rootScope, $ionicLoading) {
       var socket = io.connect('http://socket.coincap.io');

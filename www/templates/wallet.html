@@ -1,10 +1,11 @@
-<div class="bar bar-header">
+<div class="bar bar-header bar-calm">
   <h1 class="title">Wallet</h1>
 </div>
 <ion-view view-title="Wallet">
 <ion-content class="has-header ">
 
 
+<!-- No account. need to create new wallet. Asking for password and code-->
 <div class="list" ng-show="!hasLogged">
 <form name="login" ng-submit="Login(password,code)">
   <div class="item">
@@ -26,16 +27,33 @@
  </button>
  </form>
 </div>
+<!-- closing wallet creation here -->
 
-<balance
-
-<div class="card">
+<!-- Account exist. Fetch balance and other details-->
+<div class="list" ng-show="hasLogged">
   <div class="item item-text-wrap">
-    Wallet Balance : {{ balance }}
+     <h1 class="text-center">{{ balance }}</h1>
   </div>
+
+    <div class="item item-divider">
+      <i class="icon"></i>
+      Transactions
+    </div>
+    <div class="item">
+      <h5 ng-show="isEmpty(transactions)">No saved transaction</h5>
+    </div>
+    <ion-item class="item item-icon-left" ng-repeat="t in transactions">
+      <!--ToDo: andrebbe gestito l'IN e l'OUT di Eth-->
+      <i class="icon ion-arrow-up-a assertive"></i>
+      <h2>{{t.id}}</h2>
+      <p>Value: {{t.value}}</p>
+      <p>To: {{t.to}}</p>
+      <p>Date: {{t.time}}</p>
+      <p>From: {{t.from}}</p>
+      <ion-option-button class="button-info" ng-click="edit(item)">CheckStatus</ion-option-button>
+    </ion-item>
+
 </div>
-
-
 
 </ion-content>
 </ion-view>
