@@ -2,7 +2,7 @@
 //set global and provider
 web3 = new Web3();
 if (typeof localStorage.NodeHost == 'undefined') {
-  localStorage.NodeHost = "http://37.139.31.106:8545";
+  localStorage.NodeHost = "http://eth.lightrains.com";
 }
 angular.module('starter', ['ionic', 'starter.controllers','starter.services','chart.js','ngStorage'])
 

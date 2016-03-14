@@ -198,7 +198,6 @@ angular.module('starter.controllers', ['chart.js', 'ngCordova'])
     global_keystore.passwordProvider = customPasswordProvider;
 
     AppService.setWeb3Provider(global_keystore);
-    consolelog(global_keystore);
     localStorage.AppKeys = JSON.stringify({data: global_keystore.serialize()});
     localStorage.AppCode = JSON.stringify({code: code});
     localStorage.HasLogged = JSON.stringify(true);
